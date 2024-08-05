@@ -1,0 +1,40 @@
+name: Test Project
+on:
+#  pull_request:
+#    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get code
+        uses: actions/checkout@v3
+      - name: Install Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Install dependencies
+        run: npm install
+      - name: Run testsci
+        run: npm test
+  show-gitref:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Show Git Ref
+        run: echo ${{ github.ref_name }}
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get code
+        uses: actions/checkout@v3
+      - name: Install Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Install dependencies
+        run: npm install
+      - name: Build Project
+        run: npm run build
+      - name: Deploy
+        run: echo "Deploying..."
