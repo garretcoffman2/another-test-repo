@@ -1,0 +1,13 @@
+name: Generate Build Number from Date
+on:
+  push:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate build number
+        id: generate_build_number
+        run: |
+          current_date=$(date +'%Y%m%d')
+          timestamp=$(date +'%H%M%S')
+          echo "${current_date}-${timestamp}" 
