@@ -18,26 +18,4 @@ jobs:
         echo "Current version: $version"
         echo "::set-output name=version::$version"
     
-    - name: Increment version
-      id: increment_version
-      run: |
-        version=${{ steps.get_version.outputs.version }}
-        IFS='.' read -r -a version_parts <<< "$version"
-        major="${version_parts[0]}"
-        minor="${version_parts[1]}"
-        patch="${version_parts[2]}"
-        new_minor=$((minor + 1))
-        new_version="${major}.${new_minor}.${patch}"
-        echo "New version: $new_version"
-        echo "::set-output name=new_version::$new_version"
-
-    - name: Configure Git
-      run: |
-        git config --global user.name 'github-actions'
-        git config --global user.email 'github-actions@github.com'
-
-    - name: Create new tag
-      run: |
-        new_version=${{ steps.increment_version.outputs.new_version }}
-        git tag -a "v$new_version" -m "Incremented to version v$new_version"
-        git push origin "v$new_version"
+ 
