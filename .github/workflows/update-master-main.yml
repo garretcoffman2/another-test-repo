@@ -16,11 +16,9 @@ jobs:
       - name: Get latest VERSION tag
         id: get_latest_version_tag
         run: |
-          # Fetch the latest tag starting with "VERSION"
           latest_tag=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           https://api.github.com/repos/${{ github.repository }}/tags | jq -r '.[] | select(.name | startswith("VERSION")) | .name' | sort -V | tail -n 1)
           
-          # If no VERSION tag is found, set it to a default value
           if [ -z "$latest_tag" ]; then
             latest_tag="VERSION.0.0.0"
           fi
@@ -31,14 +29,11 @@ jobs:
       - name: Increment version
         id: increment_version
         run: |
-          # Extract version numbers from the latest tag
           version_number="${{ env.latest_tag#VERSION. }}"
           IFS='.' read -r major minor patch <<< "$version_number"
           
-          # Increment the minor version
           minor=$((minor + 1))
           
-          # Construct the new tag
           new_tag="VERSION.$major.$minor.$patch"
           
           echo "New tag: $new_tag"
@@ -48,12 +43,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Create a new annotated tag
           curl -s -X POST -H "Authorization: token $GITHUB_TOKEN" \
           -d "{\"tag\": \"${{ env.new_tag }}\", \"message\": \"Increment version to ${{ env.new_tag }}\", \"object\": \"$(git rev-parse HEAD)\", \"type\": \"commit\"}" \
           https://api.github.com/repos/${{ github.repository }}/git/tags
           
-          # Create a reference for the new tag
           curl -s -X POST -H "Authorization: token $GITHUB_TOKEN" \
           -d "{\"ref\": \"refs/tags/${{ env.new_tag }}\", \"sha\": \"$(git rev-parse HEAD)\"}" \
           https://api.github.com/repos/${{ github.repository }}/git/refs
