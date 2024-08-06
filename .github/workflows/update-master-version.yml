@@ -1,0 +1,46 @@
+name: Update Version Tag on Merge to Master
+
+on:
+  push:
+    branches:
+      - master
+
+concurrency:
+  group: version-update
+  cancel-in-progress: false
+
+jobs:
+  update-version-tag:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get latest tag
+        id: get_latest_tag
+        run: |
+          latest_tag=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          https://api.github.com/repos/${{ github.repository }}/tags | jq -r '.[0].name')
+          if [ -z "$latest_tag" ]; then
+            latest_tag="0.0.0"
+          fi
+          echo "Latest tag: $latest_tag"
+          echo "latest_tag=$latest_tag" >> $GITHUB_ENV
+
+      - name: Increment version
+        id: increment_version
+        run: |
+          IFS='.' read -r major minor patch <<< "${{ env.latest_tag }}"
+          minor=$((minor + 1))
+          new_tag="$major.$minor.$patch"
+          echo "New tag: $new_tag"
+          echo "new_tag=$new_tag" >> $GITHUB_ENV
+
+      - name: Create and push new tag
+        run: |
+          # Create a new annotated tag
+          curl -s -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          -d "{\"tag\": \"${{ env.new_tag }}\", \"message\": \"Increment version to ${{ env.new_tag }}\", \"object\": \"$(git rev-parse HEAD)\", \"type\": \"commit\"}" \
+          https://api.github.com/repos/${{ github.repository }}/git/tags
+          
+          # Create a reference for the new tag
+          curl -s -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          -d "{\"ref\": \"refs/tags/${{ env.new_tag }}\", \"sha\": \"$(git rev-parse HEAD)\"}" \
+          https://api.github.com/repos/${{ github.repository }}/git/refs
