@@ -1,9 +1,9 @@
-name: Update Version Tag on Merge to Master
+name: Update Version Tag on Merge to Main
 
 on:
   push:
     branches:
-      - master
+      - main
     types:
       - closed
 
