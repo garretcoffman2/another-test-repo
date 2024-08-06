@@ -3,7 +3,7 @@ name: Update Version Tag on Merge to Main
 on:
   push:
     branches:
-      - master
+      - main
 
 concurrency:
   group: version-update
