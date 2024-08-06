@@ -3,14 +3,15 @@ name: Update Version Tag on Merge to Main
 on:
   push:
     branches:
-      - main
-    types:
-      - closed
+      - master
+
+concurrency:
+  group: version-update
+  cancel-in-progress: false
 
 jobs:
   update-version-tag:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true
     steps:
       - name: Get latest version tag
         id: get_latest_version_tag
