@@ -1,0 +1,13 @@
+name: CI
+on:
+  push:
+    branches: [ main ]
+jobs:
+  container-test-job:
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/dotnet/core/sdk:3.1.201
+
+    steps:
+      - name: Check for dockerenv file
+        run: Echo "pull success"
