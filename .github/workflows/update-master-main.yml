@@ -5,19 +5,17 @@ on:
     branches:
       - main
 
-concurrency:
-  group: version-update
-  cancel-in-progress: false
-
 jobs:
   update-version-tag:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v2
+
       - name: Get latest tag
         id: get_latest_tag
         run: |
-          latest_tag=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-          https://api.github.com/repos/${{ github.repository }}/tags | jq -r '.[0].name')
+          latest_tag=$(git describe --tags `git rev-list --tags --max-count=1`)
           if [ -z "$latest_tag" ]; then
             latest_tag="0.0.0"
           fi
@@ -34,13 +32,10 @@ jobs:
           echo "new_tag=$new_tag" >> $GITHUB_ENV
 
       - name: Create and push new tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Create a new annotated tag
-          curl -s -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-          -d "{\"tag\": \"${{ env.new_tag }}\", \"message\": \"Increment version to ${{ env.new_tag }}\", \"object\": \"$(git rev-parse HEAD)\", \"type\": \"commit\"}" \
-          https://api.github.com/repos/${{ github.repository }}/git/tags
-          
-          # Create a reference for the new tag
-          curl -s -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-          -d "{\"ref\": \"refs/tags/${{ env.new_tag }}\", \"sha\": \"$(git rev-parse HEAD)\"}" \
-          https://api.github.com/repos/${{ github.repository }}/git/refs
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git tag ${{ env.new_tag }}
+          git push origin ${{ env.new_tag }}
