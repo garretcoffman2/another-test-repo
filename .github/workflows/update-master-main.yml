@@ -1,47 +1,43 @@
-name: Update Version Tag on Merge to Main
-
 on:
   push:
     branches:
       - main
 
-concurrency:
-  group: version-update
-  cancel-in-progress: false
-
 jobs:
-  update-version-tag:
+  increment_version:
     runs-on: ubuntu-latest
+    
     steps:
-      - name: Get latest version tag
-        id: get_latest_version_tag
-        run: |
-          latest_tag=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-          https://api.github.com/repos/${{ github.repository }}/tags | jq -r '.[0].name')
-          if [ -z "$latest_tag" ]; then
-            latest_tag="v.0.0.0"
-          fi
-          echo "Latest tag: $latest_tag"
-          echo "latest_tag=$latest_tag" >> $GITHUB_ENV
+    - name: Checkout repository
+      uses: actions/checkout@v3
 
-      - name: Increment version
-        id: increment_version
-        run: |
-          version_number="${{ env.latest_tag#v. }}"
-          IFS='.' read -r major minor patch <<< "$version_number"
-          minor=$((minor + 1))
-          new_tag="v.$major.$minor.$patch"
-          echo "New tag: $new_tag"
-          echo "new_tag=$new_tag" >> $GITHUB_ENV
+    - name: Get current version
+      id: get_version
+      run: |
+        version=$(git describe --tags `git rev-list --tags --max-count=1`)
+        echo "Current version: $version"
+        echo "::set-output name=version::$version"
+    
+    - name: Increment version
+      id: increment_version
+      run: |
+        version=${{ steps.get_version.outputs.version }}
+        IFS='.' read -r -a version_parts <<< "$version"
+        major="${version_parts[0]}"
+        minor="${version_parts[1]}"
+        patch="${version_parts[2]}"
+        new_minor=$((minor + 1))
+        new_version="${major}.${new_minor}.${patch}"
+        echo "New version: $new_version"
+        echo "::set-output name=new_version::$new_version"
 
-      - name: Create and push new version tag
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          curl -s -X POST -H "Authorization: token $GITHUB_TOKEN" \
-          -d "{\"tag\": \"${{ env.new_tag }}\", \"message\": \"Increment version to ${{ env.new_tag }}\", \"object\": \"$(git rev-parse HEAD)\", \"type\": \"commit\"}" \
-          https://api.github.com/repos/${{ github.repository }}/git/tags
-          
-          curl -s -X POST -H "Authorization: token $GITHUB_TOKEN" \
-          -d "{\"ref\": \"refs/tags/${{ env.new_tag }}\", \"sha\": \"$(git rev-parse HEAD)\"}" \
-          https://api.github.com/repos/${{ github.repository }}/git/refs
+    - name: Configure Git
+      run: |
+        git config --global user.name 'github-actions'
+        git config --global user.email 'github-actions@github.com'
+
+    - name: Create new tag
+      run: |
+        new_version=${{ steps.increment_version.outputs.new_version }}
+        git tag -a "v$new_version" -m "Incremented to version v$new_version"
+        git push origin "v$new_version"
