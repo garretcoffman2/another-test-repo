@@ -13,40 +13,34 @@ jobs:
   update-version-tag:
     runs-on: ubuntu-latest
     steps:
-      - name: Get latest VERSION tag
-        id: get_latest_version_tag
+      - name: Get latest tag
+        id: get_latest_tag
         run: |
           latest_tag=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-          https://api.github.com/repos/${{ github.repository }}/tags | jq -r '.[] | select(.name | startswith("VERSION")) | .name' | sort -V | tail -n 1)
-          
+          https://api.github.com/repos/${{ github.repository }}/tags | jq -r '.[0].name')
           if [ -z "$latest_tag" ]; then
-            latest_tag="VERSION.0.0.0"
+            latest_tag="0.0.0"
           fi
-          
           echo "Latest tag: $latest_tag"
           echo "latest_tag=$latest_tag" >> $GITHUB_ENV
 
       - name: Increment version
         id: increment_version
         run: |
-          version_number="${{ env.latest_tag#VERSION. }}"
-          IFS='.' read -r major minor patch <<< "$version_number"
-          
+          IFS='.' read -r major minor patch <<< "${{ env.latest_tag }}"
           minor=$((minor + 1))
-          
-          new_tag="VERSION.$major.$minor.$patch"
-          
+          new_tag="$major.$minor.$patch"
           echo "New tag: $new_tag"
           echo "new_tag=$new_tag" >> $GITHUB_ENV
 
-      - name: Create and push new VERSION tag
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create and push new tag
         run: |
-          curl -s -X POST -H "Authorization: token $GITHUB_TOKEN" \
+          # Create a new annotated tag
+          curl -s -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           -d "{\"tag\": \"${{ env.new_tag }}\", \"message\": \"Increment version to ${{ env.new_tag }}\", \"object\": \"$(git rev-parse HEAD)\", \"type\": \"commit\"}" \
           https://api.github.com/repos/${{ github.repository }}/git/tags
           
-          curl -s -X POST -H "Authorization: token $GITHUB_TOKEN" \
+          # Create a reference for the new tag
+          curl -s -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           -d "{\"ref\": \"refs/tags/${{ env.new_tag }}\", \"sha\": \"$(git rev-parse HEAD)\"}" \
           https://api.github.com/repos/${{ github.repository }}/git/refs
