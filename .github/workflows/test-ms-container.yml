@@ -49,7 +49,7 @@ jobs:
           COPYRIGHT_YEAR="$current_year"
         fi
         
-        echo "COPYRIGHT_YEAR=$COPYRIGHT_YEAR"
+        echo $COPYRIGHT_YEAR
         echo "COPYRIGHT_YEAR=$COPYRIGHT_YEAR" >> $GITHUB_ENV
 
         COPYRIGHT_SYMBOL="©"
