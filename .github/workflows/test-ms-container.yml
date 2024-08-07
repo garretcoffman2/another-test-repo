@@ -5,9 +5,22 @@ on:
 jobs:
   container-test-job:
     runs-on: ubuntu-latest
+
     container:
       image: mcr.microsoft.com/dotnet/core/sdk:3.1.201
 
     steps:
-      - name: Check for dockerenv file
-        run: Echo "pull success"
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up working directory
+      id: setup-dir
+      run: |
+        if [[ $(uname) == CYGWIN_NT-10.0* ]]; then
+          echo "Adjusting CURDIR for Cygwin"
+          CURDIR=$(cygpath -m "$PWD")
+          echo "CURDIR=$CURDIR" >> $GITHUB_ENV
+        else
+          CURDIR=$PWD
+          echo "CURDIR=$CURDIR" >> $GITHUB_ENV
+        fi
