@@ -13,11 +13,15 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
+    - name: Set up Git
+      run: |
+        git config user.name 'Garret Coffman'
+        git config user.email 'garret.coffman2023@gmail.com'
 
     - name: Get latest tag
       id: get_latest_tag
       run: |
-        LATEST_TAG=$(git describe --tags --match "v*" --abbrev=0 || echo 'v0.0.0')
+        LATEST_TAG=$(git describe --tags --match "v*" --abbrev=0)
         echo "LATEST_TAG=$LATEST_TAG" >> $GITHUB_ENV
 
     - name: Increment minor version
