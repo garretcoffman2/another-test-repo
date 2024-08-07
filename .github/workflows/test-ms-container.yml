@@ -6,7 +6,7 @@ on:
 env:
   COMPANY: "Illumina, Inc"
   CONFIG_SIGN_ENFORCED: false
-  FIRST_PUBLISH_YEAR: 2023
+  FIRST_PUBLISH_YEAR: "2023"
 
 jobs:
   container-check-variables:
