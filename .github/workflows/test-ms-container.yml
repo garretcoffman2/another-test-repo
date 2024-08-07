@@ -41,7 +41,7 @@ jobs:
       id: set-copyright
       run: |
         current_year=$(date +%Y)
-        echo current_year
+        echo $current_year
         first_publish_year=${{ env.FIRST_PUBLISH_YEAR }}
         echo first_publish_year
         echo current_year
