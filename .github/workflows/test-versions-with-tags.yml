@@ -13,21 +13,29 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Get tags matching v*.*.*
-      id: get_matching_tags
+    - name: Fetch all tags
       run: |
-        # Get all tags that match the pattern v*.*.*
-        MATCHING_TAGS=$(git tag -l 'v*.*.*')
-        if [ -z "$MATCHING_TAGS" ]; then
-          echo "No tags matching the pattern v*.*.* found"
-        else
-          echo "MATCHING_TAGS=$MATCHING_TAGS" >> $GITHUB_ENV
+        git fetch --tags
+
+    - name: Get most recent version tag
+      id: get_version_tag
+      run: |
+        # Define the version tag pattern
+        VERSION_PATTERN='v*.*.*'
+        
+        # Get all tags matching the version pattern and sort them
+        LATEST_TAG=$(git tag -l "$VERSION_PATTERN" --sort=-v:refname | head -n 1)
+        
+        # If no tag matches the pattern, default to "v0.0.0"
+        if [ -z "$LATEST_TAG" ]; then
+          LATEST_TAG="v0.0.0"
         fi
+        
+        echo "LATEST_TAG=$LATEST_TAG" >> $GITHUB_ENV
 
-    - name: Echo MATCHING_TAGS
+    - name: Echo LATEST_TAG
       run: |
-        echo "MATCHING_TAGS are: ${{ env.MATCHING_TAGS }}"
-
+        echo "LATEST_TAG is: ${{ env.LATEST_TAG }}"
     - name: Increment minor version
       id: increment_version
       run: |
