@@ -2,8 +2,6 @@ name: Update Version Tag on Merge to Master
 
 on:
   push:
-    branches:
-      - master
     paths:
       - '.github/workflows/update-master-version.yml'
 
