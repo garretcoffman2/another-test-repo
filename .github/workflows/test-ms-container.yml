@@ -54,7 +54,7 @@ jobs:
     - name: Set copyright
       id: set-copyright-full
       run: |
-        COPYRIGHT_SYMBOL="\xC2\xA9"
+        COPYRIGHT_SYMBOL="©"
         COMPANY=${{ env.COMPANY }}
         COPYRIGHT_YEAR=${{ env.COPYRIGHT_YEAR }}
         COPYRIGHT="$COPYRIGHT_SYMBOL $COPYRIGHT_YEAR $COMPANY All Rights Reserved."
