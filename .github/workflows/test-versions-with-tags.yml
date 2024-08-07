@@ -4,6 +4,8 @@ on:
   push:
     paths:
       - '.github/workflows/test-versions-with-tags.yml'
+    tags:
+      - 'v*.*.*'  # Match tags of the form vX.X.X
 
 jobs:
   create-release:
@@ -14,7 +16,7 @@ jobs:
 
     - name: Get version from tag
       id: get_version
-      run: echo "version= $(git describe --abbrev=0 --tags)" >> $GITHUB_ENV
+      run: echo "BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
 
     - name: Display version
       run: echo "The version is $VERSION"
