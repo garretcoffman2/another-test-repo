@@ -46,6 +46,6 @@ jobs:
         COMPANY=${{ env.COMPANY }}
         COPYRIGHT_YEAR=${{ env.COPYRIGHT_YEAR }}
         COPYRIGHT="$COPYRIGHT_SYMBOL $COPYRIGHT_YEAR $COMPANY All Rights Reserved."
-        
+        echo "before"
         echo "COPYRIGHT=$COPYRIGHT" >> $GITHUB_ENV 
-  
+        echo "after"
