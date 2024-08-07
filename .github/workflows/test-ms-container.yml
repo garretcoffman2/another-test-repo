@@ -51,11 +51,15 @@ jobs:
         
         echo $COPYRIGHT_YEAR
         echo "COPYRIGHT_YEAR=$COPYRIGHT_YEAR" >> $GITHUB_ENV
+        echo "${{ env.COPYRIGHT_YEAR }}"
 
+    - name: Set copyright
+      id: set-copyright-full
+      run: |
         COPYRIGHT_SYMBOL="©"
-        COPYRIGHT_YEAR="${{ env.COPYRIGHT_YEAR }}"
-        COPYRIGHT="$COPYRIGHT_SYMBOL "${{ env.COPYRIGHT_YEAR }}" "${{ env.COMPANY }}" All Rights Reserved."
-        echo $COPYRIGHT
+        COMPANY=${{ env.COMPANY }}
+        COPYRIGHT_YEAR=${{ env.COPYRIGHT_YEAR }}
+        COPYRIGHT="$COPYRIGHT_SYMBOL $COPYRIGHT_YEAR $COMPANY All Rights Reserved."
         
         echo "COPYRIGHT=$COPYRIGHT" >> $GITHUB_ENV        
 
