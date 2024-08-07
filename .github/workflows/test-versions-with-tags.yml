@@ -39,6 +39,16 @@ jobs:
         NEW_TAG="v$MAJOR.$MINOR.0"
         echo "NEW_TAG=$NEW_TAG" >> $GITHUB_ENV
 
+    - name: Configure Git
+      run: |
+        git config --global user.name 'Garret Coffman'
+        git config --global user.email 'garret.coffman2023@gmail.com'
+
+    - name: Display Git info
+      run: |
+        git status
+        git tag -l
+
     - name: Push new tag
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
