@@ -14,7 +14,7 @@ jobs:
 
     - name: Get version from tag
       id: get_version
-      run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+      run: echo "version= $(git describe --abbrev=0 --tags)" >> $GITHUB_ENV
 
     - name: Display version
       run: echo "The version is $VERSION"
