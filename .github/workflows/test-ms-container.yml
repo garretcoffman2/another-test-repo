@@ -2,8 +2,14 @@ name: CI
 on:
   push:
     branches: [ main ]
+
+env:
+  COMPANY: "Illumina, Inc"
+  CONFIG_SIGN_ENFORCED: false
+  FIRST_PUBLISH_YEAR: 2023
+
 jobs:
-  container-test-job:
+  container-check-variables:
     runs-on: ubuntu-latest
 
     container:
@@ -13,18 +19,54 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Set up working directory
-      id: setup-dir
+    - name: Read Version from File
+      id: read_version
       run: |
-        if [[ $(uname) == CYGWIN_NT-10.0* ]]; then
-          echo "Adjusting CURDIR for Cygwin"
-          CURDIR=$(cygpath -m "$PWD")
-          echo "CURDIR=$CURDIR" >> $GITHUB_ENV
+        VERSION=$(cat build/VERSION)
+        echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+        - name: Set build environment variables
+        id: set-vars
+        run: |
+          if [ "${{ env.CONFIG_SIGN_ENFORCED }}" = "false" ]; then
+            echo "SECURE_TAG=insecure" >> $GITHUB_ENV
+            echo "RELEASE=0.insecure" >> $GITHUB_ENV
+            echo "DIST_DIR=insecure" >> $GITHUB_ENV
+          else
+            echo "RELEASE=0" >> $GITHUB_ENV
+            echo "DIST_DIR=secure" >> $GITHUB_ENV
+          fi        
+
+    - name: Set copyright year
+      id: set-copyright
+      run: |
+        current_year=$(date +%Y)
+        first_publish_year=${{ env.FIRST_PUBLISH_YEAR }}
+        
+        if [ "$first_publish_year" -lt "$current_year" ]; then
+          COPYRIGHT_YEAR="$first_publish_year-$current_year"
         else
-          CURDIR=$PWD
-          echo "CURDIR=$CURDIR" >> $GITHUB_ENV
+          COPYRIGHT_YEAR="$current_year"
         fi
-    - name: Echo env
-      id: show-folder-contents
+        
+        echo "COPYRIGHT_YEAR=$COPYRIGHT_YEAR" >> $GITHUB_ENV
+
+    - name: Set copyright
+      id: set-copyright-full
       run: |
-          ls -la
+        COPYRIGHT_SYMBOL="\xC2\xA9"
+        COMPANY=${{ env.COMPANY }}
+        COPYRIGHT_YEAR=${{ env.COPYRIGHT_YEAR }}
+        COPYRIGHT="$COPYRIGHT_SYMBOL $COPYRIGHT_YEAR $COMPANY All Rights Reserved."
+        
+        echo "COPYRIGHT=$COPYRIGHT" >> $GITHUB_ENV        
+
+
+    - name: Run dotnet pack in Docker container
+      run: |
+        
+        echo "${{ env.VERSION }}"
+        echo "${{ env.COMPANY }}" 
+        echo "${{ env.COPYRIGHT }}"
+
+
