@@ -43,7 +43,7 @@ jobs:
         current_year=$(date +%Y)
         echo $current_year
         first_publish_year=${{ env.FIRST_PUBLISH_YEAR }}
-        echo first_publish_year
+        echo $first_publish_year
         echo current_year
         if [ "${{ env.FIRST_PUBLISH_YEAR }}" -lt "$current_year" ]; then
           echo COPYRIGHT_YEAR="$first_publish_year-$current_year" >> $GITHUB_ENV
