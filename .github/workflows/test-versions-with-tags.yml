@@ -21,7 +21,7 @@ jobs:
           LATEST_TAG="v1.0.0"
         fi
         echo "LATEST_TAG=$LATEST_TAG" >> $GITHUB_ENV
-        echo ${{ env.LATEST_TAG }}
+        echo "LATEST_TAG is: ${{ env.LATEST_TAG }}"
 
 
     - name: Increment minor version
