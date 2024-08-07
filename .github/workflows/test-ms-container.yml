@@ -50,7 +50,7 @@ jobs:
         fi
         
         echo "COPYRIGHT_YEAR=$COPYRIGHT_YEAR" >> $GITHUB_ENV
-        echo "${{ env.COPYRIGHT_YEAR }}"
+        "echo ${{ env.COPYRIGHT_YEAR }}"
 
     - name: Set copyright
       id: set-copyright-full
