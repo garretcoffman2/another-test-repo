@@ -25,17 +25,17 @@ jobs:
         VERSION=$(cat build/VERSION)
         echo "VERSION=$VERSION" >> $GITHUB_ENV
 
-        - name: Set build environment variables
-        id: set-vars
-        run: |
-          if [ "${{ env.CONFIG_SIGN_ENFORCED }}" = "false" ]; then
-            echo "SECURE_TAG=insecure" >> $GITHUB_ENV
-            echo "RELEASE=0.insecure" >> $GITHUB_ENV
-            echo "DIST_DIR=insecure" >> $GITHUB_ENV
-          else
-            echo "RELEASE=0" >> $GITHUB_ENV
-            echo "DIST_DIR=secure" >> $GITHUB_ENV
-          fi        
+    - name: Set build environment variables
+      id: set-vars
+      run: |
+        if [ "${{ env.CONFIG_SIGN_ENFORCED }}" = "false" ]; then
+          echo "SECURE_TAG=insecure" >> $GITHUB_ENV
+          echo "RELEASE=0.insecure" >> $GITHUB_ENV
+          echo "DIST_DIR=insecure" >> $GITHUB_ENV
+        else
+          echo "RELEASE=0" >> $GITHUB_ENV
+          echo "DIST_DIR=secure" >> $GITHUB_ENV
+        fi        
 
     - name: Set copyright year
       id: set-copyright
