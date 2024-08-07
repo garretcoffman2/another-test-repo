@@ -24,6 +24,9 @@ jobs:
           echo "MATCHING_TAGS=$MATCHING_TAGS" >> $GITHUB_ENV
         fi
 
+    - name: Echo MATCHING_TAGS
+      run: |
+        echo "MATCHING_TAGS are: ${{ env.MATCHING_TAGS }}"
 
     - name: Increment minor version
       id: increment_version
