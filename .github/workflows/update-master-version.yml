@@ -5,7 +5,7 @@ on:
     branches:
       - master
     paths:
-      - '.github/workflows/your-workflow-file.yml'
+      - '.github/workflows/update-master-version.yml'
 
 concurrency:
   group: version-update

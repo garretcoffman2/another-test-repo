@@ -2,7 +2,7 @@ name: Test Project
 on:
   push:
     paths:
-      - '.github/workflows/your-workflow-file.yml'
+      - '.github/workflows/test.yml'
 jobs:
   test:
     runs-on: ubuntu-latest

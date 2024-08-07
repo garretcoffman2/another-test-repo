@@ -2,7 +2,7 @@ name: Generate Build Number from Date
 on:
   push:
     paths:
-      - '.github/workflows/your-workflow-file.yml'
+      - '.github/workflows/get-build-number-from-date.yml'
 jobs:
   test:
     runs-on: ubuntu-latest

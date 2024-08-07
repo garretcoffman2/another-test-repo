@@ -3,7 +3,7 @@ on:
   push:
     branches: [ main ]
     paths:
-      - '.github/workflows/your-workflow-file.yml'
+      - '.github/workflows/test-ms-container.yml'
 
 env:
   COMPANY: "Illumina, Inc"
