@@ -23,7 +23,6 @@ jobs:
         echo "LATEST_TAG=$LATEST_TAG" >> $GITHUB_ENV
         echo $LATEST_TAG
 
-
     - name: Increment minor version
       id: increment_version
       run: |
