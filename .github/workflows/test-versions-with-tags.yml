@@ -2,8 +2,8 @@ name: Tag Release
 
 on:
   push:
-    tags:
-      - 'v*.*.*'
+    paths:
+      - '.github/workflows/test-versions-with-tags.yml'
 
 jobs:
   create-release:
