@@ -27,6 +27,7 @@ jobs:
     - name: Increment minor version
       id: increment_version
       run: |
+        LATEST_TAG=${LATEST_TAG#v}
         IFS='.' read -r MAJOR MINOR PATCH <<< "${{ env.LATEST_TAG }}"
         MINOR=$((MINOR + 1))
         echo $MAJOR
