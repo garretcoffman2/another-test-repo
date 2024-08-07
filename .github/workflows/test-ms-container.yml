@@ -57,9 +57,7 @@ jobs:
       id: set-copyright-full
       run: |
         COPYRIGHT_SYMBOL="©"
-        echo $COPYRIGHT_SYMBOL
         COMPANY=${{ env.COMPANY }}
-        echo $COMPANY
         COPYRIGHT_YEAR=${{ env.COPYRIGHT_YEAR }}
         COPYRIGHT="$COPYRIGHT_SYMBOL $COPYRIGHT_YEAR $COMPANY All Rights Reserved."
         echo $COPYRIGHT
