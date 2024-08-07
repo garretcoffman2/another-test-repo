@@ -45,14 +45,12 @@ jobs:
         
         if [ "$first_publish_year" -lt "$current_year" ]; then
           COPYRIGHT_YEAR="$first_publish_year-$current_year"
-          echo $COPYRIGHT_YEAR
         else
           COPYRIGHT_YEAR="$current_year"
-          echo $COPYRIGHT_YEAR
         fi
         
         echo "COPYRIGHT_YEAR=$COPYRIGHT_YEAR" >> $GITHUB_ENV
-
+        echo "${{ env.COPYRIGHT_YEAR }}"
 
     - name: Set copyright
       id: set-copyright-full
