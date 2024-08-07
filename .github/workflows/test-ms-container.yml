@@ -53,14 +53,11 @@ jobs:
         echo "COPYRIGHT_YEAR=$COPYRIGHT_YEAR" >> $GITHUB_ENV
         echo "COPYRIGHT_YEAR in current step: $COPYRIGHT_YEAR"
 
-    - name: Display copyright year
-      run: |
-        echo "COPYRIGHT_YEAR from previous step: ${{ env.COPYRIGHT_YEAR }}"
-
     - name: Set copyright
       id: set-copyright-full
       run: |
         COPYRIGHT_SYMBOL="©"
+        echo $COPYRIGHT_SYMBOL
         COMPANY=${{ env.COMPANY }}
         echo $COMPANY
         COPYRIGHT_YEAR=${{ env.COPYRIGHT_YEAR }}
