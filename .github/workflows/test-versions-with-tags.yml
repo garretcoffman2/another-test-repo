@@ -4,8 +4,7 @@ on:
   push:
     paths:
       - '.github/workflows/test-versions-with-tags.yml'
-    tags:
-      - 'v*.*.*'  # Match tags of the form vX.X.X
+
 
 jobs:
   create-release:
