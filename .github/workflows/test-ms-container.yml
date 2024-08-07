@@ -24,3 +24,7 @@ jobs:
           CURDIR=$PWD
           echo "CURDIR=$CURDIR" >> $GITHUB_ENV
         fi
+    - name: Echo env
+      id: echo environment
+      run: |
+          echo $GITHUN_ENV
