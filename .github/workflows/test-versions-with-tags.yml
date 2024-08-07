@@ -18,10 +18,11 @@ jobs:
       run: |
         LATEST_TAG=$(git tag -l "v*" --sort=-v:refname | head -n 1)
         if [ -z "$LATEST_TAG" ]; then
-          LATEST_TAG="v0.0.0"
+          LATEST_TAG="v1.0.0"
         fi
         echo "LATEST_TAG=$LATEST_TAG" >> $GITHUB_ENV
         echo $LATEST_TAG
+
 
     - name: Increment minor version
       id: increment_version
