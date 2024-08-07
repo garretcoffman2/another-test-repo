@@ -36,6 +36,7 @@ jobs:
     - name: Echo LATEST_TAG
       run: |
         echo "LATEST_TAG is: ${{ env.LATEST_TAG }}"
+
     - name: Increment minor version
       id: increment_version
       run: |
@@ -44,10 +45,6 @@ jobs:
         IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
         MINOR=$((MINOR + 1))
         PATCH=0
-        echo "NEW_TAG=$NEW_TAG" >> $GITHUB_ENV
-        echo $MAJOR
-        echo $MINOR
-        echo $PATCH
         NEW_TAG="v$MAJOR.$MINOR.0"
         echo "NEW_TAG=$NEW_TAG" >> $GITHUB_ENV
 
