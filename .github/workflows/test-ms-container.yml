@@ -7,7 +7,7 @@ on:
 env:
   COMPANY: "TestString Inc."
   CONFIG_SIGN_ENFORCED: false
-  FIRST_PUBLISH_YEAR: 2024
+  FIRST_PUBLISH_YEAR: 2020
 
 jobs:
   container-check-variables:
