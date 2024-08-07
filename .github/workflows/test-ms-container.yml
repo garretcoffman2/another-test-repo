@@ -15,7 +15,7 @@ jobs:
 
     container:
       image: mcr.microsoft.com/dotnet/core/sdk:3.1.201
-
+      options: --rm
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
@@ -61,7 +61,7 @@ jobs:
         COPYRIGHT_YEAR=${{ env.COPYRIGHT_YEAR }}
         COPYRIGHT="$COPYRIGHT_SYMBOL $COPYRIGHT_YEAR $COMPANY All Rights Reserved."
         echo $COPYRIGHT
-        echo "COPYRIGHT=$COPYRIGHT" >> $GITHUB_ENV        
+        echo "COPYRIGHT=$COPYRIGHT" >> $GITHUB_ENV
 
 
     - name: Output containers
@@ -70,5 +70,3 @@ jobs:
         echo "${{ env.VERSION }}"
         echo "${{ env.COMPANY }}" 
         echo "${{ env.COPYRIGHT }}"
-
-
