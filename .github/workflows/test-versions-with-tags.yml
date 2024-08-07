@@ -16,7 +16,7 @@ jobs:
     - name: Get latest tag
       id: get_latest_tag
       run: |
-        LATEST_TAG=$(git tag -l "v*" --sort=-v:refname | head -n 1)
+        LATEST_TAG=$(git tag -l "v*" --sort=-v:refname --always | head -n 1)
         if [ -z "$LATEST_TAG" ]; then
           LATEST_TAG="v1.0.0"
         fi
