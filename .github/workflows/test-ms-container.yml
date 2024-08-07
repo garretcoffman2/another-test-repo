@@ -38,7 +38,7 @@ jobs:
           echo "DIST_DIR=secure" >> $GITHUB_ENV
         fi        
 
-    - name: Create Copyright String
+    - name: Create Copyright Year
       id: set-copyright
       run: |
         current_year=$(date +%Y)
@@ -52,7 +52,10 @@ jobs:
         
         echo $COPYRIGHT_YEAR
         echo "COPYRIGHT_YEAR=$COPYRIGHT_YEAR" >> $GITHUB_ENV
-        echo "${{ env.COPYRIGHT_YEAR }}"
+
+    - name: Display copyright year
+      run: |
+        echo "COPYRIGHT_YEAR from previous step: ${{ env.COPYRIGHT_YEAR }}"
 
     - name: Set copyright
       id: set-copyright-full
