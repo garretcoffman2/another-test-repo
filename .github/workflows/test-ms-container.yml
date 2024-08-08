@@ -5,7 +5,7 @@ on:
       - '.github/workflows/test-ms-container.yml'
 
 env:
-  COMPANY: "TestString Inc."
+  COMPANY: 'TestString Inc.'
   CONFIG_SIGN_ENFORCED: false
   FIRST_PUBLISH_YEAR: 2020
 
@@ -61,6 +61,7 @@ jobs:
         COPYRIGHT="'© $COPYRIGHT_YEAR $COMPANY All Rights Reserved.'"
         echo $COPYRIGHT
         echo "COPYRIGHT=$COPYRIGHT" >> $GITHUB_ENV
+        echo "COMPANY='COMPANY'" >> $GITHUB_ENV
 
     - name: Output variables
       run: |
