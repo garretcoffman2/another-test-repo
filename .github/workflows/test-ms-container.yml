@@ -56,10 +56,9 @@ jobs:
     - name: Set copyright
       id: set-copyright-full
       run: |
-        COPYRIGHT_SYMBOL="©"
         COMPANY="${{ env.COMPANY }}"
         COPYRIGHT_YEAR=${{ env.COPYRIGHT_YEAR }}
-        COPYRIGHT='\"© $COPYRIGHT_YEAR $COMPANY All Rights Reserved.\"'
+        COPYRIGHT='\"©\ $COPYRIGHT_YEAR $COMPANY All Rights Reserved.\"'
         echo $COPYRIGHT
         echo "COPYRIGHT=$COPYRIGHT" >> $GITHUB_ENV
 
