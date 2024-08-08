@@ -63,8 +63,7 @@ jobs:
         echo $COPYRIGHT
         echo "COPYRIGHT=$COPYRIGHT" >> $GITHUB_ENV
 
-
-    - name: Output containers
+    - name: Output variables
       run: |
         
         echo "${{ env.VERSION }}"
