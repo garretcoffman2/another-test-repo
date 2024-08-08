@@ -1,7 +1,6 @@
 name: Manage Version Artifact
 
 on:
-  workflow_dispatch: # Allows you to manually trigger this workflow
   push:
     paths:
       - '.github/workflows/workflow-with-github-artifacts.yml'
