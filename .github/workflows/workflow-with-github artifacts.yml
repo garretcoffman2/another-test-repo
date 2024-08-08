@@ -1,0 +1,46 @@
+name: Manage Version Artifact
+
+on:
+  workflow_dispatch: # Allows you to manually trigger this workflow
+  push:
+    paths:
+      - '.github/workflows/workflow-with-github-artifacts.yml'
+
+jobs:
+  update-version:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Download version artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: version
+
+    - name: Extract and increment version
+      id: increment_version
+      run: |
+        # Check if the version file exists
+        if [ -f version.txt ]; then
+          CURRENT_VERSION=$(cat version.txt)
+        else
+          CURRENT_VERSION="v1.0.0"
+        fi
+
+        # Extract version parts
+        IFS='.' read -r MAJOR MINOR PATCH <<< "${CURRENT_VERSION#v}"
+
+        # Increment minor version
+        NEW_MINOR=$((MINOR + 1))
+        NEW_VERSION="v$MAJOR.$NEW_MINOR.0"
+
+        # Save the new version to a file
+        echo "$NEW_VERSION" > version.txt
+
+        echo "VERSION=$NEW_VERSION" >> $GITHUB_ENV
+        echo "New version: $NEW_VERSION"
+
+    - name: Upload updated version artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: version
+        path: version.txt
