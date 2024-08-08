@@ -61,7 +61,7 @@ jobs:
         COPYRIGHT="'© $COPYRIGHT_YEAR $COMPANY All Rights Reserved.'"
         echo $COPYRIGHT
         echo "COPYRIGHT=$COPYRIGHT" >> $GITHUB_ENV
-        echo "COMPANY='COMPANY'" >> $GITHUB_ENV
+        echo "COMPANY='$COMPANY'" >> $GITHUB_ENV
 
     - name: Output variables
       run: |
