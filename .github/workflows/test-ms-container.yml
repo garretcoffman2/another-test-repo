@@ -5,7 +5,7 @@ on:
       - '.github/workflows/test-ms-container.yml'
 
 env:
-  COMPANY: 'TestString Inc.'
+  COMPANY: 'TestString, Inc.'
   CONFIG_SIGN_ENFORCED: false
   FIRST_PUBLISH_YEAR: 2020
 

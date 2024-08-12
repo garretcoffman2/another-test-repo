@@ -1,0 +1,24 @@
+name: Test Directories Loop
+
+on:
+  push:
+    paths:
+      - '.github/workflows/loops-test.yml'
+
+jobs:
+  example_job:
+    runs-on: ubuntu-latest
+    
+    env:
+      MY_VALUES: "value1,value2,value3"
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      
+      - name: Use delimited string as an array
+        run: |
+          IFS=',' read -r -a my_array <<< "${MY_VALUES}"
+          for element in "${my_array[@]}"
+          do
+            echo "$element"
+          done
