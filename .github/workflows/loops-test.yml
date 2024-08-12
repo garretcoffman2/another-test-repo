@@ -11,6 +11,9 @@ env:
 jobs:
   example_job:
     runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/dotnet/core/sdk:3.1.201
+      options: --rm
     
     env:
       MY_VALUES: "value1,value2,value3"
