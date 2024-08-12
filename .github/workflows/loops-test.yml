@@ -5,6 +5,9 @@ on:
     paths:
       - '.github/workflows/loops-test.yml'
 
+env:
+  VALUES: "value1,value2,value3"
+
 jobs:
   example_job:
     runs-on: ubuntu-latest
@@ -17,7 +20,7 @@ jobs:
       
       - name: Use delimited string as an array
         run: |
-          IFS=',' read -r -a my_array <<< "${MY_VALUES}"
+          IFS=',' read -r -a my_array <<< ${{ env.VALUES }}
           for element in "${my_array[@]}"
           do
             echo "$element"
