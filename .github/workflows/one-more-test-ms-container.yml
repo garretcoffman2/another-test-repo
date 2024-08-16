@@ -19,6 +19,7 @@ jobs:
     - name: Install NuGet CLI
       shell: bash
       run: |
+        apt update
         apt install nuget
         nuget --version
         nuget --help
