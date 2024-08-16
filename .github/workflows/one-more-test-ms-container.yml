@@ -19,11 +19,9 @@ jobs:
     - name: Install NuGet CLI
       shell: bash
       run: |
-        wget https://dist.nuget.org/win-x86-commandline/latest/nuget.exe -O /usr/local/bin/nuget.exe
-        chmod +x /usr/local/bin/nuget.exe
+        apt install nuget
         nuget --version
         nuget --help
-
 
       
     
